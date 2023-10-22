@@ -9,7 +9,7 @@ import (
 // `form:"username" json:"user" uri:"user" xml:"user" binding:"required"`
 type Data struct {
 	ID                uint
-	PrintTime         string `gorm:"default:42" json:"time"`
+	PrintTime         string // `gorm:"default:42" json:"time"`
 	PrintHeight       string
 	PrintSpeed        string
 	ProfileVelocity   string
