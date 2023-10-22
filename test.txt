@@ -1,0 +1,12 @@
+
+"PrintTime": "1",
+"PrintHeight": "1",
+"PrintSpeed": "1",
+"ProfileVelocity": "1",
+"IdleAcceleration": "1",
+"PullbackLength": "1",
+"PullbackSpeed": "1",
+"NozzleTemperature": "1",
+"BadTemperature": "1",
+"PrintCondition": "1",
+"ProblemCollection": "1",
