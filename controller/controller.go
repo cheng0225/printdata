@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
 	"printdata/model"
 	"printdata/tool"
 )
@@ -50,17 +51,30 @@ func UploadFile(c *gin.Context) {
 		return
 	}
 	// 生成文件名 和文件路径 并保存文件
-	fileName, ferr := tool.GetFileName(file.Filename)
+	fileName, err := tool.GetFileName(file.Filename)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
+	}
 	filePath := "uploads/" + fileName
-	if err = c.SaveUploadedFile(file, filePath); err != nil || ferr != nil {
+	if err = c.SaveUploadedFile(file, filePath); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
 		return
 	}
+
 	// 内容提取 保存到数据库
-	data := model.Data{
-		FilePath: filePath,
+	// fileContent, openErr := tool.ReadDataFromFile(filePath)
+	// if openErr != nil || getErr != nil{
+	data, getErr := tool.GetDataFromFile(filePath)
+	if getErr != nil {
+		// 读取文件失败时进行删除
+		_ = os.Remove(filePath)
+		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
 	}
-	if err = model.Create(&data); err != nil {
+
+	// data := model.Data{
+	// 	FilePath: filePath,
+	// }
+	if err = model.Create(data); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"err": err.Error()})
 		return
 	}
